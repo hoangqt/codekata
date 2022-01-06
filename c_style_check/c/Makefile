@@ -1,10 +1,10 @@
 # Use gcc instead of default clang aka cc
-CC=gcc
+CC=gcc-11
 
 all: build
 
 build: ## build S=file_wo_ext
-	$(CC) -o ${S} ${S}.c -Wall -Wstrict-prototypes -ansi -pedantic -std=c99
+	$(CC) -o ${S} ${S}.c
 
 clean: ## clean
 	rm -f ${S}
