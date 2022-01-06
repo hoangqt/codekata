@@ -12,11 +12,8 @@ const MAX_LINE_LENGTH = 80
 
 var tabs = regexp.MustCompile(`\t`)
 var comma_space = regexp.MustCompile(`,[^ ]`)
-
-/* This one is really tough to get right, so we settle for catching the
-most common mistakes.  Add other operators as necessary and/or feasible. */
-var operator_space      = regexp.MustCompile(`(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)`)
-var comment_line        = regexp.MustCompile(`^\s*\/\*.*\*\/\s*$`)
+var operator_space = regexp.MustCompile(`(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)`)
+var comment_line = regexp.MustCompile(`^\s*\/\*.*\*\/\s*$`)
 var open_comment_space = regexp.MustCompile(`\/\*[^ *\n]`)
 var close_comment_space = regexp.MustCompile(`[^ *]\*\/`)
 var paren_curly_space = regexp.MustCompile(`\)\{`)
@@ -24,11 +21,11 @@ var c_plus_plus_comment = regexp.MustCompile(`\/\/`)
 var semi_space = regexp.MustCompile(`;[^ \s]`)
 
 func checkLine(filename string, line string, n int) {
-	// Strip the terminal newline
-	strings.TrimRight(line, "\n")
+	// Strip the terminal newline.
+	line = strings.TrimRight(line, "\n")
 
 	if tabs.MatchString(line) {
-	        fmt.Printf("File: %s, line %d: [TABS]:\n%s", filename, n, line)
+		fmt.Printf("File: %s, line %d: [TABS]:\n%s", filename, n, line)
 	}
 
 	if len(line) > MAX_LINE_LENGTH {
@@ -39,30 +36,30 @@ func checkLine(filename string, line string, n int) {
 		fmt.Printf("File: %s, line: %d: [PUT SPACE AFTER OPEN COMMENT]:\n%s\n", filename, n, line)
 	}
 
-        if close_comment_space.MatchString(line) {
+	if close_comment_space.MatchString(line) {
 		fmt.Printf("File: %s, line: %d: [PUT SPACE AFTER CLOSE COMMENT]:\n%s\n", filename, n, line)
 	}
 
-	if paren_curly_space.MatchString(line){
+	if paren_curly_space.MatchString(line) {
 		fmt.Printf("File: %s, line: %d: [PUT SPACE BETWEEN ) AND {]:\n%s\n", filename, n, line)
 	}
 
 	if c_plus_plus_comment.MatchString(line) {
-	        fmt.Printf("File: %s, line: %d: [DON'T USE C++ COMMENTS]:\n%s\n", filename, n, line)
+		fmt.Printf("File: %s, line: %d: [DON'T USE C++ COMMENTS]:\n%s\n", filename, n, line)
 	}
 
-        if semi_space.MatchString(line) {
-	        fmt.Printf("File: %s, line: %d: [PUT SPACE/NEWLINE AFTER SEMICOLON]:\n%s\n", filename, n, line)
+	if semi_space.MatchString(line) {
+		fmt.Printf("File: %s, line: %d: [PUT SPACE/NEWLINE AFTER SEMICOLON]:\n%s\n", filename, n, line)
 	}
 
-        if operator_space.MatchString(line) {
-                if !comment_line.MatchString(line) {
-	                fmt.Printf("File: %s, line: %d: [PUT SPACE AROUND OPERATORS]:\n%s\n", filename, n, line)
-	        }
-        }
+	if operator_space.MatchString(line) {
+		if !comment_line.MatchString(line) {
+			fmt.Printf("File: %s, line: %d: [PUT SPACE AROUND OPERATORS]:\n%s\n", filename, n, line)
+		}
+	}
 
-        if comma_space.MatchString(line) {
-	        fmt.Printf("File: %s, line: %d: [PUT SPACE AFTER COMMA]:\n%s\n", filename, n, line)
+	if comma_space.MatchString(line) {
+		fmt.Printf("File: %s, line: %d: [PUT SPACE AFTER COMMA]:\n%s\n", filename, n, line)
 	}
 }
 
@@ -75,7 +72,7 @@ func checkFile(filename string) {
 	defer file.Close()
 
 	i := 0
-	// read file line by line
+	// Read file line by line.
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		i++ // Start on line 1.
