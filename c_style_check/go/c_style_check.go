@@ -10,7 +10,7 @@ import (
 
 const MAX_LINE_LENGTH = 80
 
-var tabs = regexp.MustCompile(`\t`)
+var tabs = regexp.MustCompile(`\t+`)
 var comma_space = regexp.MustCompile(`,[^ ]`)
 var operator_space = regexp.MustCompile(`(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)`)
 var comment_line = regexp.MustCompile(`^\s*\/\*.*\*\/\s*$`)

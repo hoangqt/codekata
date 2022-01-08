@@ -4,10 +4,11 @@ set -euo pipefail
 
 readonly MAX_LINE_LENGTH=80
 
-readonly tabs='\t'
+readonly tabs="\t+"
 readonly comma_space=",[^ ]"
-readonly operator_space="(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)"
-readonly comment_line="^\s*\/\*.*\*\/\s*$"
+# readonly operator_space="([:alpha:](\+|\-|\*|\<|\>|\=)[:alpha:])|([:alpha:](\=\=|\<\=|\>\=)[:alpha:])"
+readonly operator_space="*\=\=*"
+readonly comment_line="^[:space:]*\/\*.*\*\/[:space:]*$"
 readonly open_comment_space="\/\*[^ *\n]"
 readonly close_comment_space="[^ *]\*\/"
 readonly paren_curly_space="\)\{"
@@ -22,7 +23,8 @@ check_line() {
   # Strip the trailing newline
   line="${line%$'\n'}"
 
-  if [[ "$line" =~ tabs ]]; then
+  # TODO: fix this
+  if [[ "$line" =~ $tabs ]]; then
     printf "File: %s, line %s: [TABS]:\n%s\n" "$filename" "$n" "$line"
   fi
 
@@ -50,6 +52,7 @@ check_line() {
     printf "File: %s, line: %d: [PUT SPACE/NEWLINE AFTER SEMICOLON]:\n%s\n" "$filename" "$n" "$line"
   fi
 
+  # TODO: fix this
   if [[ "$line" =~ $operator_space ]]; then
     if [[ ! "$line" =~ $comment_line ]]; then
       printf "File: %s, line: %d: [PUT SPACE AROUND OPERATORS]:\n%s\n" "$filename" "$n" "$line"

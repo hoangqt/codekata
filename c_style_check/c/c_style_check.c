@@ -15,9 +15,9 @@ void checkLine(char *filename, char *line, int n) {
 
   regcomp(&regex, "\\t+", 0);
   return_value = regexec(&regex, line, 0, NULL, 0);
-  if (return_value == 0) {
+  if (return_value==0) {
     printf("File: %s, line: %d: [TABS]:\n%s\n", filename, n, line);
-    /* Free memory allocated by regcomp. */
+    /* Free memory allocated by regcomp.*/
     regfree(&regex);
   }
 
@@ -28,18 +28,24 @@ void checkLine(char *filename, char *line, int n) {
 
   regcomp(&regex, ",[^ ]", 0);
   return_value = regexec(&regex, line, 0, NULL, 0);
-  if (return_value == 0) {
+  if (return_value==0) {
     printf("File: %s, line: %d: [PUT SPACE AFTER COMMA]:\n%s\n", filename, n,
            line);
     regfree(&regex);
   }
 
-  regcomp(&regex, "(\\w(\\+|\\-|\\*|\\<|\\>|\\=)\\w)|(\\w(\\=\\=|\\<\\=|\\>\\=)\\w)", 0);
+  /* TODO: fix this. */
+  regcomp(&regex,"(\\w(\\+|\\-|\\*|\\<|\\>|\\=)\\w)|(\\w(\\=\\=|\\<\\=|\\>\\=)\\w)", 0);
   return_value = regexec(&regex, line, 0, NULL, 0);
   if (return_value == 0) {
-    printf("File: %s, line: %d: [PUT SPACE AROUND OPERATORS]:\n%s\n", filename,
-           n, line);
     regfree(&regex);
+    regcomp(&regex, "^\\s*\\/\\*.*\\*\\/\\s*$", 0);
+    return_value = regexec(&regex, line, 0, NULL, 0);
+    if (return_value != 0) {
+        printf("File: %s, line: %d: [PUT SPACE AROUND OPERATORS]:\n%s\n", filename,
+           n, line);
+        regfree(&regex);
+    }
   }
 
   regcomp(&regex, "\\/\\*[^ *]", 0);
