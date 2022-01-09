@@ -10,7 +10,9 @@ local paren_curly_space = '%)%{'
 local comma_space = ',[^ ]'
 local semi_space = ';[^ \\s]'
 
--- Limitations of Lua patterns not supporting () with OR aka |
+-- Limitations of Lua patterns not supporting () with |. See the following
+-- http://lua-users.org/wiki/PatternsTutorial
+--
 -- luarocks install lrexlib-pcre https://github.com/rrthomas/lrexlib
 local rex = require("rex_pcre")
 -- Need to break the original pattern into two parts :-/
