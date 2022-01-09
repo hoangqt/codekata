@@ -4,11 +4,13 @@ set -euo pipefail
 
 readonly MAX_LINE_LENGTH=80
 
-readonly tabs="\t+"
+# ANSI-C Quoting
+# https://www.gnu.org/software/bash/manual/html_node/ANSI_002dC-Quoting.html#ANSI_002dC-Quoting
+readonly tabs=$'\t+'
+
 readonly comma_space=",[^ ]"
-# readonly operator_space="([:alpha:](\+|\-|\*|\<|\>|\=)[:alpha:])|([:alpha:](\=\=|\<\=|\>\=)[:alpha:])"
-readonly operator_space="*\=\=*"
-readonly comment_line="^[:space:]*\/\*.*\*\/[:space:]*$"
+readonly operator_space="(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)"
+readonly comment_line="^\s*\/\*.*\*\/\s*$"
 readonly open_comment_space="\/\*[^ *\n]"
 readonly close_comment_space="[^ *]\*\/"
 readonly paren_curly_space="\)\{"
@@ -23,8 +25,7 @@ check_line() {
   # Strip the trailing newline
   line="${line%$'\n'}"
 
-  # TODO: fix this
-  if [[ "$line" =~ $tabs ]]; then
+  if [[ "$line" =~ tabs ]]; then
     printf "File: %s, line %s: [TABS]:\n%s\n" "$filename" "$n" "$line"
   fi
 

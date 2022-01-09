@@ -1,6 +1,5 @@
 #!usr/bin/env lua-5.4
 
-
 local MAX_LINE_LENGTH = 80
 
 local tabs = '\t+'
@@ -10,8 +9,16 @@ local close_comment_space = '[^ *]%*%/'
 local paren_curly_space = '%)%{'
 local comma_space = ',[^ ]'
 local semi_space = ';[^ \\s]'
-local operator_space = '(%w(%+|%-|%*|%<|%>|%=)%w)|(%w(%=%=|%<%=|%>%=)%w)'
-local comment_line = '^%s*%/%*.*%*%/%s*$'
+
+-- Limitations of Lua patterns not supporting () with OR aka |
+-- luarocks install lrexlib-pcre https://github.com/rrthomas/lrexlib
+local rex = require("rex_pcre")
+-- Need to break the original pattern into two parts :-/
+-- Pattern: '(\\w(\\+|\\-|\\*|\\<|\\>|\\=)\\w)|(\\w(\\=\\=|\\<\\=|\\>\\=)\\w)'
+local operator_space_1 = rex.new('(\\w(\\+|\\-|\\*|\\<|\\>|\\=)\\w)')
+local operator_space_2 = rex.new('(\\w(\\=\\=|\\<\\=|\\>\\=)\\w)')
+
+local comment_line = rex.new('^\\s*\\/\\*.*\\*\\/\\s*$')
 
 function checkLine(filename, line, n)
 
@@ -43,9 +50,9 @@ function checkLine(filename, line, n)
     print(string.format("File: %s, line %d: [PUT SPACE AFTER COMMA]:\n%s", filename, n, line))
   end
 
-  -- TODO: fix this
-  if string.match(line, operator_space) then
-    if not string.match(line, comment_line) then
+  -- Use lrexlib-pcre library to work around Lua regex limitations.
+  if operator_space_1:match(line) or operator_space_2:match(line) then
+    if not comment_line:match(line) then
       print(string.format("File: %s, line %d: [PUT SPACE AROUND OPERATORS]:\n%s", filename, n, line))
     end
   end
