@@ -25,7 +25,7 @@ check_line() {
   # Strip the trailing newline
   line="${line%$'\n'}"
 
-  if [[ "$line" =~ tabs ]]; then
+  if [[ "$line" =~ $tabs ]]; then
     printf "File: %s, line %s: [TABS]:\n%s\n" "$filename" "$n" "$line"
   fi
 
