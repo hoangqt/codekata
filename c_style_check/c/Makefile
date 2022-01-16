@@ -1,10 +1,12 @@
 # Use gcc instead of default clang aka cc
-CC=gcc-11
+CC=gcc
 
 all: build
 
 build: ## build S=file_wo_ext
-	$(CC) -o ${S} ${S}.c
+	# -g enable debug symbols
+	# -O2 optimize for speed
+	$(CC) -g -O2 -std=gnu11 -o ${S} ${S}.c
 
 clean: ## clean
 	rm -f ${S}
