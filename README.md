@@ -10,8 +10,8 @@ is to enjoy the process.
 
 ### Observations
 
-CPP/Java use similar syntax. In cpp, std::regex_search works but not std::regex_match.
-Need to dig deeper.
+CPP/Java use similar syntax. In cpp, std::regex_search to match a sub-part
+instead of using std::regex_match where it tries to match entire searched text.
 
 golang/Javascript/Ruby are similar. These are the easiest to implement.
 
