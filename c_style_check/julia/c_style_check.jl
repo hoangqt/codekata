@@ -1,16 +1,16 @@
-MAX_LINE_LENGTH = 80
+const MAX_LINE_LENGTH = 80
 
-tabs = r"\t+"
-comma_space = r",[^ ]"
-operator_space = r"(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)"
-comment_line = r"^\s*\/\*.*\*\/\s*$"
-open_comment_space = r"\/\*[^ *\n]"
-close_comment_space = r"[^ *]\*\/"
-paren_curly_space = r"\)\{"
-c_plus_plus_comment = r"//"
-semi_space = r";[^ \s]"
+const tabs = r"\t+"
+const comma_space = r",[^ ]"
+const operator_space = r"(\w(\+|\-|\*|\<|\>|\=)\w)|(\w(\=\=|\<\=|\>\=)\w)"
+const comment_line = r"^\s*\/\*.*\*\/\s*$"
+const open_comment_space = r"\/\*[^ *\n]"
+const close_comment_space = r"[^ *]\*\/"
+const paren_curly_space = r"\)\{"
+const c_plus_plus_comment = r"//"
+const semi_space = r";[^ \s]"
 
-function checkLine(filename, line, n)
+function check_line(filename::String, line::String, n::Int)
     # Strip the terminal newline
     line = rstrip(line)
 
@@ -39,7 +39,9 @@ function checkLine(filename, line, n)
     end
 
     if occursin(semi_space, line)
-        print("File: $(filename), line: $(n): [PUT SPACE/NEWLINE AFTER SEMICOLON]:\n$(line)\n")
+        print(
+            "File: $(filename), line: $(n): [PUT SPACE/NEWLINE AFTER SEMICOLON]:\n$(line)\n",
+        )
     end
 
     if occursin(operator_space, line)
@@ -53,12 +55,12 @@ function checkLine(filename, line, n)
     end
 end
 
-function checkFile(filename)
+function check_file(filename::String)
     i = 0
     open(filename) do file
         for line in eachline(file)
             i += 1
-            checkLine(filename, line, i)
+            check_line(filename, line, i)
         end
     end
 end
@@ -68,13 +70,13 @@ function usage()
     return
 end
 
-function main(args)
+function main(args::Vector{String})
     if length(args) < 1
         usage()
     end
 
     for arg in ARGS
-        checkFile(arg)
+        check_file(arg)
     end
 end
 
