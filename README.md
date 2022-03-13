@@ -25,3 +25,5 @@ C is quite unique on its own.
 Bash regex is weird.
 
 Lua requires a 3rd party library.
+
+Julia is similar to Lua in syntax.
