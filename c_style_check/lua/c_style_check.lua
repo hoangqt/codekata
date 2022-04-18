@@ -1,14 +1,13 @@
 #!usr/bin/env lua-5.4
 
-local MAX_LINE_LENGTH = 80
-
-local tabs = '\t+'
-local c_plus_plus_comment = '%/%/'
-local open_comment_space = '%/%*[^ *\\n]'
-local close_comment_space = '[^ *]%*%/'
-local paren_curly_space = '%)%{'
-local comma_space = ',[^ ]'
-local semi_space = ';[^ \\s]'
+local MAX_LINE_LENGTH <const> = 80
+local tabs <const> = '\t+'
+local c_plus_plus_comment<const> = '%/%/'
+local open_comment_space <const> = '%/%*[^ *\\n]'
+local close_comment_space <const> = '[^ *]%*%/'
+local paren_curly_space <const> = '%)%{'
+local comma_space <const> = ',[^ ]'
+local semi_space <const> = ';[^ \\s]'
 
 -- Limitations of Lua patterns not supporting () with |. See the following
 -- http://lua-users.org/wiki/PatternsTutorial

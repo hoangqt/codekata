@@ -4,4 +4,4 @@ set -euo pipefail
 
 CWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-nodemon -e clj --exec "clj -M src/clj/core.clj src/clj/c_style_check.c" --watch "$CWD"
+nodemon -e clj --exec "clojure -M src/clj/core.clj src/clj/c_style_check.c" --watch "$CWD"
