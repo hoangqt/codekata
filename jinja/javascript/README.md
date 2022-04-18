@@ -1,3 +1,3 @@
-Install resty template engine
+Install nunjucks dependency
 
-luarocks install lua-resty-template
+npm i nunjucks
