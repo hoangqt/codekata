@@ -10,11 +10,12 @@ from jinja2 import Template
 class GitlabCIGenerator(object):
     def _get_dsm_list(self) -> List[str]:
         settings_gradle_file = "settings.gradle"
+        marker = "include '"
         dsm_list = []
         with open(settings_gradle_file, "r") as f:
             file_content = f.read()
             for line in file_content.splitlines():
-                if "include '" in line:
+                if marker in line:
                     # Extract the DSM name from include 'aruba-mobility'
                     dsm_list.append(line[9:-1])
 
