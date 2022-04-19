@@ -1,3 +1,7 @@
-Download and copy anja.hpp to:
+### MacOS
 
-/path/to/project/external/inja
+brew install inja
+
+Copy anja.hpp to project folder
+
+cp /usr/local/include/inja/inja.hpp /path/to/project/external/inja
