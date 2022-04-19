@@ -8,13 +8,10 @@ project(genciconf VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set($CMAKE_SOURCE_DIR/external/inja/inja.hpp)
 
 add_executable(genciconf genciconf.cpp)
 
-find_package(inja 3.3 REQUIRED)
-add_library(inja INTERFACE)
-target_link_libraries(genciconf PRIVATE inja)
-
-# find_package(nlohmann_json 3.10.5 REQUIRED)
-# add_library(nlohmann_json INTERFACE)
-# target_link_libraries(genciconf PRIVATE nlohmann_json::nlohmann_json)
+find_package(nlohmann_json 3.10.5 REQUIRED)
+add_library(nlohmann_json INTERFACE)
+target_link_libraries(genciconf PRIVATE nlohmann_json::nlohmann_json)

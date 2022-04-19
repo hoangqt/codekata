@@ -1,9 +1,10 @@
-#include <stdlib.h>
-#include <iostream>
 #include <fstream>
+#include <inja/inja.hpp>
+#include <iostream>
+#include <nlohmann/json.hpp>
+#include <stdlib.h>
 #include <string>
 #include <vector>
-#include <inja.hpp>
 
 std::vector<std::string> getDSMList(void) {
   std::string settingsGradleFile = "settings.gradle";
@@ -16,37 +17,52 @@ std::vector<std::string> getDSMList(void) {
     exit(255);
   }
   std::string line;
-  while(std::getline(file, line)) {
+  while (std::getline(file, line)) {
     if (line.find(marker) != std::string::npos) {
-      dsmList.push_back(line);
+      // TODO: I don't know why line.length() - 10 works here :-/
+      dsmList.push_back(line.substr(9, line.length() - 10));
     }
   }
+  file.close();
 
   return dsmList;
 }
 
-// TODO: add https://github.com/jinja2cpp/Jinja2Cpp
 std::string getTriggerSnippet(std::string dsm) {
-  return "Cisco Meraki";
+  nlohmann::json j;
+
+  j["dsm"] = dsm;
+
+  std::string templateStr = "Build {{ dsm }}:\n"
+                            "  stage: Triggers\n"
+                            "  trigger:\n"
+                            "    include: {{ dsm }}/.gitlab-ci.yml\n"
+                            "    strategy: depend\n"
+                            "  rules:\n"
+                            "    - changes:\n"
+                            "        - \"**/*\"\n";
+
+  std::string renderedText = inja::render(templateStr, j);
+
+  return renderedText;
 }
 
 void genTriggerYaml(void) {
   std::string triggerYaml = "triggers.yml";
   std::vector<std::string> dsmList = getDSMList();
 
-  for (int i = 0; i < dsmList.size(); i++) {
-      std::cout << dsmList[i] << std::endl;
-  }
-
   std::fstream file;
+  // Opens file for appending
   file.open(triggerYaml, std::ios_base::app);
   if (!file.is_open()) {
     std::cerr << "Unable to open: " << triggerYaml << std::endl;
     exit(255);
   }
-  std::string blah = "blah";
 
-  file << getTriggerSnippet(blah) << std::endl;
+  for (int i = 0; i < dsmList.size(); i++) {
+    file << getTriggerSnippet(dsmList[i]) << std::endl;
+  }
+  file.close();
 }
 
 int main(int argc, char **argv) {
