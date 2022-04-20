@@ -2,7 +2,7 @@
 
 require 'mustache'
 
-def get_dsm_list()
+def get_dsm_list
   settings_gradle_file = 'settings.gradle'
   marker = "include '"
   dsm_list = []
@@ -29,14 +29,13 @@ Build {{ dsm }}:
   HEREDOC
 
   Mustache.render(trigger_template, dsm: dsm)
-
 end
 
-def gen_trigger_yaml()
-  triggerYaml = "triggers.yml"
-  dsm_list = get_dsm_list()
+def gen_trigger_yaml
+  trigger_yaml = 'triggers.yml'
+  dsm_list = get_dsm_list
   dsm_list.each do |dsm|
-    File.open(triggerYaml, 'a') do |file|
+    File.open(trigger_yaml, 'a') do |file|
       file.puts(get_trigger_snippet(dsm))
       file.puts("\n")
     end
